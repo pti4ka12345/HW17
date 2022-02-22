@@ -112,10 +112,10 @@ class DirectorView(Resource):
         return directors_schema.dump(directors), 200
 
     def post(self):
-        req_json = request.json
-        new_director = Director(**req_json)
+        new_director = Director(**request.json)
         with db.session.begin():
             db.session.add(new_director)
+            db.session.commit()
         return "", 201
 
 @director_ns.route('/<int:uid>')
@@ -124,8 +124,7 @@ class DirectorView(Resource):
         director = Director.query.get(uid)
         if not director:
             return "", 404
-        req_json = request.json
-        director.name = req_json.get("director")
+        director.name = request.json.get('name')
         db.session.add(director)
         db.session.commit()
         return "", 204
@@ -145,10 +144,10 @@ class GenreView(Resource):
         return genres_schema.dump(genres), 200
 
     def post(self):
-        req_json = request.json
-        new_genre = Genre(**req_json)
+        new_genre = Genre(**request.json)
         with db.session.begin():
             db.session.add(new_genre)
+            db.session.commit()
         return "", 201
 
 
@@ -158,8 +157,7 @@ class GenreView(Resource):
         genre = Genre.query.get(uid)
         if not genre:
             return "", 404
-        req_json = request.json
-        genre.name = req_json.get("genre")
+        genre.name = request.json.get('name')
         db.session.add(genre)
         db.session.commit()
         return "", 204
